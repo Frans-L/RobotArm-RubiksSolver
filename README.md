@@ -1,6 +1,6 @@
 # Robotic Arms - Rubik's Cube Solver
 
-Two 6 axis robotic arms that solve a Rubik's cube. A picture of the cube is taken by an Android app and information of the cube is send the robotic arms over Bluetooth. The robotic arms are made of Legos. The motors are controlled by Mindstorms NXT 2.0. The Android app is programmed in Java. (WIP) 
+Two 6 axis robotic arms that solve a Rubik's cube. A picture of the cube is taken by an Android app and information of the cube is send to the robotic arms over Bluetooth. The robotic arms are made of Legos. The motors are controlled by Mindstorms NXT 2.0. The Android app is programmed in Java. (WIP) 
 
 You can read more detailed version in Finnish: [Palikkatakomo Foorumi](http://www.palikkatakomo.org/forum/read.php?4,38848)
 
