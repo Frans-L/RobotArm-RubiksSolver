@@ -45,6 +45,8 @@ The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and
 
 *Note*: At the moment, only the code of the Android app is on Github.
 
+---
+
 ## Authors
 
 * **Henry P** - Management, Desinging, Building, NXC Progamming [Zwenkka](https://github.com/Zwenkka)
