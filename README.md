@@ -10,29 +10,39 @@ You can read more detailed version in Finnish: [Palikkatakomo Foorumi](http://ww
 
 ## Idea
 
-The idea is to build two robotic arms that solves Rubik's cube. The robotic arms have 6 degrees of freedom. There should be an Android app that captures images of a Rubik's cube. The app also calculates a solution. The solution is sent to the robotic arms over Bluetooth.
+The idea is to build two robotic arms that can solve a Rubik's cube. The robotic arms have 6 degrees of freedom. There should be an Android app that captures images of a Rubik's cube. The app also calculates a solution. The solution is sent to the robotic arms over Bluetooth.
 
 The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and by bunch of Legos. The Android app is programmed in Java.
 
+
 ## Status
 
-* **Done**
-	* Robotic Arms
-	* Kinematics
-	* Servo Controls
-	* Communication between NXT bricks
-* **WIP**
+* **Robotic Arms**
+	* Kinematics **✔**
+	* Servo Controls **✔**
+	* Grabber **✔**
+	* Compressed Air **WIP**
+	* Movements  
+
+* **Android App**
 	* Image Recognition
-		* App that takes pictures - *DONE*
-		* Recognize the Cube - *WIP*
-	* Communication between NXT and phone
-		* Send data to NXT over Bluetooth - *DONE*
-		* Add data sending feature to the App - *WIP*
-	* Combine everything
+		* Capturing Images **✔**
+		* Recognizing a Cube **WIP**
+	* Sending Information
+		* Communication **✔**
+		* Sending the solution
 
-Read more detailed version in Finnish: [Palikkatakomo Foorumi](http://www.palikkatakomo.org/forum/read.php?4,38848)
+* **Communication**
+	* NXT -> NXT **✔**
+	* Android -> NXT **✔**
+	* NXT -> Android **?**
 
-Note: At the moment, only the code of the Android app is on Github.
+* **Solving the Cube**
+	* With Internet **✔**
+	* Without Internet 
+
+
+*Note*: At the moment, only the code of the Android app is on Github.
 
 ## Authors
 
