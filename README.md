@@ -14,6 +14,7 @@ The idea is to build two robotic arms that can solve a Rubik's cube. The robotic
 
 The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and by bunch of Legos. The Android app is programmed in Java.
 
+---
 
 ## Status
 
