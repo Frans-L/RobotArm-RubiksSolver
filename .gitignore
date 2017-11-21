@@ -1,0 +1,35 @@
+
+# Anroid Studio
+*.apk
+*.ap_
+*.dex
+*.class
+
+bin/
+gen/
+out/
+
+.gradle/
+build/
+local.properties
+proguard/
+
+.log
+.navigation/
+
+captures/
+
+# IntelliJ
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/libraries
+
+.externalNativeBuild
+google-services.json
+
+freeline.py
+freeline/
+freeline_project_description.json
