@@ -17,7 +17,7 @@ The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and
 ## Status
 
 * **Done**
-	* Robot Arms
+	* Robotic Arms
 	* Kinematics
 	* Servo Controls
 	* Communication between NXT bricks
@@ -30,8 +30,9 @@ The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and
 		* Add data sending feature to the App - *WIP*
 	* Combine everything
 
+Read more detailed version in Finnish: [Palikkatakomo Foorumi](http://www.palikkatakomo.org/forum/read.php?4,38848)
 
-Note: Read more detailed version in Finnish: [Palikkatakomo Foorumi](http://www.palikkatakomo.org/forum/read.php?4,38848)
+Note: At the moment, only the code of the Android app is on Github.
 
 ## Authors
 
