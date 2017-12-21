@@ -74,7 +74,7 @@ public class CameraActivity extends AppCompatActivity {
         });
 
 
-        PreviewOverlayView prev = (PreviewOverlayView) findViewById(R.id.surfaceView2);
+        PreviewOverlayView prev = (PreviewOverlayView) findViewById(R.id.previewViewMask);
         prev.setZOrderOnTop(true);
         prev.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
@@ -92,6 +92,7 @@ public class CameraActivity extends AppCompatActivity {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             previewSize = map.getOutputSizes(SurfaceTexture.class)[0];
+            Log.println(Log.ERROR, "FRANS", "True Height: " + previewSize.getHeight() + " width: " + previewSize.getWidth() );
 
 
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PERMISSION_GRANTED){

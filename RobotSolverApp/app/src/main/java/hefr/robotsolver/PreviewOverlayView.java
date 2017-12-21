@@ -58,6 +58,14 @@ public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Cal
         final float centerX = canvas.getWidth()/2f;
         final float length = canvas.getWidth()*0.75f;
         canvas.drawRect(centerX - length/2, centerY - length/2 , centerX + length/2, centerY + length/2, paint);
+        canvas.drawRect(1, 1 , canvas.getWidth(), canvas.getHeight(), paint);
+        for(int y=0; y<3; y ++){
+            for(int x=0; x<3; x ++){
+                canvas.drawCircle(centerX - length*4/12 + x*length*4/12, centerY - length*4/12 + y*length*4/12, 3, paint);
+            }
+        }
+
+        Log.println(Log.ERROR, "FRANS", "onDraw: " + canvas.getHeight()*1.0 / (canvas.getWidth()*1.0));
     }
 
 
