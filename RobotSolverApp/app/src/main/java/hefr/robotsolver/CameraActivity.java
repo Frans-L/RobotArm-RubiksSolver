@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
+import android.view.Choreographer;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.Arrays;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
@@ -38,15 +40,17 @@ public class CameraActivity extends AppCompatActivity {
     private Size previewSize; // The size data of the output the camera
     private ImageView imageView; //The component that is being drawn saved preview image
     private TextureView previewView; //The component that is being drawn preview
+    private CubePreviewView cubePreviewView; //The component that is being drawn preview
 
     private CameraDevice cameraDevice; //The camera that is used
     private CaptureRequest.Builder previewBuilder; //Draws the preview on its surface
     private CameraCaptureSession previewSession; //Camera's session that handles incoming data
 
     private Button takePicButton;
-
     private static final int REQUEST_CAMERA = 0; //ID to ask camera permissions
 
+    private RubikCube rubikCube;
+    private RubikAnalyzer rubikAnalyzer;
 
     @Override
     /** Initializes the view*/
@@ -59,9 +63,25 @@ public class CameraActivity extends AppCompatActivity {
         previewView = (TextureView) findViewById(R.id.previewView); //set preview window
         previewView.setSurfaceTextureListener(surfaceTextureListener);
 
+        rubikCube = new RubikCube();
+        rubikAnalyzer = new RubikAnalyzer(rubikCube);
+
+        //sets the mask over the preview
+        PreviewOverlayView previewMask = (PreviewOverlayView) findViewById(R.id.previewViewMask);
+        previewMask.setZOrderOnTop(true);
+        previewMask.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+
+        //initializes the cube preview
+        cubePreviewView = (CubePreviewView) findViewById(R.id.cubePreviewView);
+        cubePreviewView.setZOrderOnTop(true);
+        cubePreviewView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        cubePreviewView.setRubikCube(rubikCube);
+
+        Choreographer.getInstance().postFrameCallbackDelayed(new onLoaded(), 200);
+
         //Set actions to the button
         takePicButton = (Button) findViewById(R.id.takePictureButton);
-        takePicButton.setOnClickListener(new View.OnClickListener(){
+        takePicButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -70,16 +90,45 @@ public class CameraActivity extends AppCompatActivity {
                 //Update preview Image
                 imageView.setImageBitmap(previewView.getBitmap());
 
+                int side = rubikAnalyzer.analyzeSide(previewView.getBitmap());
+                cubePreviewView.update();
+                Log.println(Log.ERROR, "FRANS", "KESKI YLÄ:" + RubikCube.getColorName(rubikCube.get(RubikCube.FRONT,0,0)));
+
+
             }
         });
 
 
-        PreviewOverlayView prev = (PreviewOverlayView) findViewById(R.id.previewViewMask);
-        prev.setZOrderOnTop(true);
-        prev.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+    }
+
+    /**
+     * After all "views" are drawn, this class method doFrame is called
+     */
+    private class onLoaded implements Choreographer.FrameCallback {
+
+        public void doFrame(long frameTimeNanos) {
+            updateRubikImageLocation();
+        }
 
     }
 
+    /**
+     * Updates the location and the size of the cube on the image onto rubikAnalyzer and onto previewMask
+     */
+    private void updateRubikImageLocation() {
+        PreviewOverlayView previewMask = (PreviewOverlayView) findViewById(R.id.previewViewMask);
+        final float rubikCenterX = previewMask.getWidth() / 2f;
+        final float rubikCenterY = previewMask.getHeight() / 2f;
+        final float rubikSize = previewMask.getWidth() * 0.75f;
+
+        rubikAnalyzer.setRubikLocation(rubikCenterX, rubikCenterY, rubikSize);
+        previewMask.setRubikLocation(rubikCenterX, rubikCenterY, rubikSize);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     //Initializes the camera
     private void openCamera() {
@@ -92,12 +141,12 @@ public class CameraActivity extends AppCompatActivity {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             previewSize = map.getOutputSizes(SurfaceTexture.class)[0];
-            Log.println(Log.ERROR, "FRANS", "True Height: " + previewSize.getHeight() + " width: " + previewSize.getWidth() );
+            Log.println(Log.ERROR, "FRANS", "True Height: " + previewSize.getHeight() + " width: " + previewSize.getWidth());
 
 
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PERMISSION_GRANTED) {
                 manager.openCamera(cameraID, cameraStateCallBack, null);
-            }else{
+            } else {
                 requestCameraPermission();
             }
 
@@ -198,6 +247,7 @@ public class CameraActivity extends AppCompatActivity {
                     previewSession = session; //save the capture session, so it's data can be used
                     setPreviewUpdate();
                 }
+
                 @Override
                 public void onConfigureFailed(CameraCaptureSession session) {
                 }

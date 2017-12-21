@@ -4,21 +4,22 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.TextureView;
-import android.widget.TextView;
 
 /**
  * Created by Frans on 21/11/2017.
  */
 
-public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Callback{
+public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Paint paint = new Paint();
+
+    private float rubikCenterX = 0;
+    private float rubikCenterY = 0;
+    private float rubikSize = 0;
 
     public PreviewOverlayView(Context context) {
         super(context);
@@ -40,10 +41,9 @@ public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Cal
         init();
     }
 
-    private void init(){
+    private void init() {
         setWillNotDraw(false); //Have to called!
     }
-
 
 
     @Override
@@ -53,24 +53,23 @@ public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Cal
         paint.setTextSize(20);
         canvas.drawText("Working", 10, 25, paint);
 
+        Log.println(Log.ERROR, "FRANS", "RUBIKX: " + rubikCenterX);
+
         paint.setStyle(Paint.Style.STROKE);
-        final float centerY = canvas.getHeight()/2f;
-        final float centerX = canvas.getWidth()/2f;
-        final float length = canvas.getWidth()*0.75f;
-        canvas.drawRect(centerX - length/2, centerY - length/2 , centerX + length/2, centerY + length/2, paint);
-        canvas.drawRect(1, 1 , canvas.getWidth(), canvas.getHeight(), paint);
-        for(int y=0; y<3; y ++){
-            for(int x=0; x<3; x ++){
-                canvas.drawCircle(centerX - length*4/12 + x*length*4/12, centerY - length*4/12 + y*length*4/12, 3, paint);
+        canvas.drawRect(rubikCenterX - rubikSize / 2, rubikCenterY - rubikSize / 2, rubikCenterX + rubikSize / 2, rubikCenterY + rubikSize / 2, paint);
+        canvas.drawRect(1, 1, canvas.getWidth(), canvas.getHeight(), paint);
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                canvas.drawCircle(rubikCenterX - rubikSize / 3 * (x - 1), rubikCenterY - rubikSize / 3 * (y - 1), 3, paint);
             }
         }
 
-        Log.println(Log.ERROR, "FRANS", "onDraw: " + canvas.getHeight()*1.0 / (canvas.getWidth()*1.0));
     }
 
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        setWillNotDraw(false);
     }
 
     @Override
@@ -81,5 +80,17 @@ public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Cal
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
+
+    /**
+     * Sets the position and the size of the cube on the image
+     */
+    public void setRubikLocation(float rubikCenterX, float rubikCenterY, float rubikSize) {
+        this.rubikCenterX = rubikCenterX;
+        this.rubikCenterY = rubikCenterY;
+        this.rubikSize = rubikSize;
+        Log.println(Log.ERROR, "FRANS", "HMMM: " + rubikCenterX);
+        this.postInvalidate();
+    }
+
 }
 
