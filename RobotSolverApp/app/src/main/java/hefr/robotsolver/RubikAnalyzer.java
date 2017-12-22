@@ -31,11 +31,18 @@ public class RubikAnalyzer {
 
         //check the middle part first
         int pixel = image.getPixel(rubikCenterX, rubikCenterY);
-        Log.println(Log.ERROR, "FRANS", "Color: " + RubikCube.getColorName(ColorAnalyzer.returnCubeColor(pixel)));
+
+        float[] hsv = new float[3];
+        Color.RGBToHSV(Color.red(pixel), Color.green(pixel), Color.blue(pixel), hsv);
+        Log.println(Log.ERROR, "FRANS", "Hue: " + hsv[0] + "  Saturation: " + hsv[1] + "  Value: " + hsv[2]);
+
+        /*
+        Log.println(Log.ERROR, "FRANS", "Color: " + RubikCube.getColorName(ImageAnalyzer.returnCubeColor(pixel)));
         Log.println(Log.ERROR, "FRANS", "Pixel: " + pixel);
-        Log.println(Log.ERROR, "FRANS", "ColorI: " + ColorAnalyzer.returnCubeColor(pixel));
+        Log.println(Log.ERROR, "FRANS", "ColorI: " + ImageAnalyzer.returnCubeColor(pixel));
         Log.println(Log.ERROR, "FRANS", "R: " + Color.red(pixel) + " G: " + Color.green(pixel) + " B: " + Color.blue(pixel));
-        int colorI = ColorAnalyzer.returnCubeColor(pixel);
+        */
+        int colorI = ImageAnalyzer.returnCubeColor(pixel);
 
         //if the color wasn't found
         if (colorI == -1) {
@@ -48,7 +55,7 @@ public class RubikAnalyzer {
             for (int y = 0; y < 3; y++) {
                 for (int x = 0; x < 3; x++) {
                     pixel = image.getPixel(rubikCenterX + rubikSize / 3 * (x - 1), rubikCenterY + rubikSize / 3 * (y - 1));
-                    cube.update(side, x, y, ColorAnalyzer.returnCubeColor(pixel));
+                    cube.update(side, x, y, ImageAnalyzer.returnCubeColor(pixel));
                 }
 
             }

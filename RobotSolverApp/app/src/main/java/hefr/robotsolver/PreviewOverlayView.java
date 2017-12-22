@@ -53,8 +53,6 @@ public class PreviewOverlayView extends SurfaceView implements SurfaceHolder.Cal
         paint.setTextSize(20);
         canvas.drawText("Working", 10, 25, paint);
 
-        Log.println(Log.ERROR, "FRANS", "RUBIKX: " + rubikCenterX);
-
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(rubikCenterX - rubikSize / 2, rubikCenterY - rubikSize / 2, rubikCenterX + rubikSize / 2, rubikCenterY + rubikSize / 2, paint);
         canvas.drawRect(1, 1, canvas.getWidth(), canvas.getHeight(), paint);

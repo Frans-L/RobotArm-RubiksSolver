@@ -85,14 +85,12 @@ public class CameraActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Log.println(Log.WARN, "FRANS", "Button Pressed");
 
                 //Update preview Image
-                imageView.setImageBitmap(previewView.getBitmap());
+                imageView.setImageBitmap(ImageAnalyzer.energyTable(previewView.getBitmap()));
 
                 int side = rubikAnalyzer.analyzeSide(previewView.getBitmap());
                 cubePreviewView.update();
-                Log.println(Log.ERROR, "FRANS", "KESKI YLÄ:" + RubikCube.getColorName(rubikCube.get(RubikCube.FRONT,0,0)));
 
 
             }
