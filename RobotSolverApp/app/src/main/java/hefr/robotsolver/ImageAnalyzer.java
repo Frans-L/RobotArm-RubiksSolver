@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
+import java.util.Random;
+
 import hefr.robotsolver.utils.Util;
 
 /**
@@ -13,8 +16,12 @@ import hefr.robotsolver.utils.Util;
 public class ImageAnalyzer {
 
     public static Bitmap energyTable(Bitmap bitmap) {
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 6, bitmap.getHeight() / 6, false);
         final int width = bitmap.getWidth();
         final int height = bitmap.getHeight();
+
+        final int debugColor = Color.rgb(255, 0, 255);
 
         final Bitmap energyMap = Bitmap.createBitmap(width, height, bitmap.getConfig());
         final int energyTable[][] = new int[width][height];
@@ -30,15 +37,40 @@ public class ImageAnalyzer {
                 final float pixelY1 = Util.greyscale(bitmap.getPixel(x, Util.clamp(y - 1, 0, height - 1)));
                 final float pixelY2 = Util.greyscale(bitmap.getPixel(x, Util.clamp(y + 1, 0, height - 1)));
 
-                final int energy = (int) Math.sqrt(Math.pow((pixelX1 - pixelX2) / 2f, 2) + Math.pow((pixelY1 - pixelY2) / 2f, 2)) * 2;
+                int energy = (int) Math.sqrt(Math.pow((pixelX1 - pixelX2) / 2f, 2) + Math.pow((pixelY1 - pixelY2) / 2f, 2)) * 2;
+                //energy = Math.min((energy / 50) * 255, 255);
+                //energy = Math.max(energy - 25, 0) * 255;
                 energyTable[x][y] = energy;
-                final int color = filterBlack(bitmap.getPixel(x, y), avgHSV);
-                energyMap.setPixel(x, y, Color.rgb(Util.clamp(Color.red(color) + energy, 0, 255), Util.clamp(Color.green(color) - energy, 0, 255), Util.clamp(Color.blue(color) + energy, 0, 255)));
+                //final int color = filterBlack(bitmap.getPixel(x, y), avgHSV);
+                int color = bitmap.getPixel(x, y);
 
+                int pixel;
+                if (energy > 10 || Util.greyscale(color) < 20) {
+                    pixel = debugColor;
+                } else {
+                    pixel = color;
+                }
+
+                //final int pixel = Color.rgb(Util.clamp(Color.red(color) + energy, 0, 255), Util.clamp(Color.green(color) + energy, 0, 255), Util.clamp(Color.blue(color) + energy, 0, 255));
+
+                energyMap.setPixel(x, y, pixel);
+                if (pixel == debugColor) {
+                    energyMap.setPixel(Math.max(x - 1, 0), y, pixel);
+                    energyMap.setPixel(Math.min(x + 1, width - 1), y, pixel);
+                    energyMap.setPixel(x, Math.max(y, 0), pixel);
+                    energyMap.setPixel(x, Math.min(y, height - 1), pixel);
+                }
+                //findSquare(energyMap, Color.rgb(255, 0, 255));
             }
         }
 
-        return energyMap;
+
+        BooleanMap mask = new BooleanMap(energyMap, debugColor, BooleanMap.A);
+        mask.fillEdges(BooleanMap.A);
+        mask.clearNoise(BooleanMap.A);
+        mask.fillAreasUnder(40, BooleanMap.A);
+
+        return mask.maskBitmap(energyMap, debugColor, BooleanMap.A);
 
     }
 
