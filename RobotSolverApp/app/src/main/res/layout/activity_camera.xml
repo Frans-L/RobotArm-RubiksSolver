@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="@+id/previewView"
         app:layout_constraintVertical_bias="0.533" />
 
-    <hefr.robotsolver.CubePreviewView
+    <hefr.robotsolver.rubik.CubePreviewView
         android:id="@+id/cubePreviewView"
         android:layout_width="130dp"
         android:layout_height="130dp"

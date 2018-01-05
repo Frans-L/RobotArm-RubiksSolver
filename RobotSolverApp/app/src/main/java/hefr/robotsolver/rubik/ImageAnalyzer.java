@@ -1,11 +1,8 @@
-package hefr.robotsolver;
+package hefr.robotsolver.rubik;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
-
-import java.io.BufferedOutputStream;
-import java.util.Random;
 
 import hefr.robotsolver.utils.Util;
 

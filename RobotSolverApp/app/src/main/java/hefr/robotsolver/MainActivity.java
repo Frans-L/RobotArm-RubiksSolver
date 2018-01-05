@@ -36,13 +36,17 @@ import android.widget.ImageView;
 
 import java.util.Arrays;
 
-import hefr.robotsolver.Bluetooth.FindNXT;
-import hefr.robotsolver.Bluetooth.NXTTalker;
+import hefr.robotsolver.bluetooth.FindNXT;
+import hefr.robotsolver.bluetooth.NXTTalker;
+import hefr.robotsolver.rubik.CubePreviewView;
+import hefr.robotsolver.rubik.ImageAnalyzer;
+import hefr.robotsolver.rubik.RubikAnalyzer;
+import hefr.robotsolver.rubik.RubikCube;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
-public class CameraActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private Size previewSize; // The size data of the output the camera
     private ImageView imageView; //The component that is being drawn saved preview image
@@ -236,7 +240,7 @@ public class CameraActivity extends AppCompatActivity {
             }
 
         } catch (Exception e) {
-            Log.println(Log.ERROR, "CameraActivity", e.getMessage());
+            Log.println(Log.ERROR, "MainActivity", e.getMessage());
         }
 
     }

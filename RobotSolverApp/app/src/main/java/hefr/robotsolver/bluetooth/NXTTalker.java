@@ -22,14 +22,11 @@
  * Copyright (c) 2009 The Android Open Source Project
  */
 
-package hefr.robotsolver.Bluetooth;
+package hefr.robotsolver.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,7 +123,7 @@ public class NXTTalker {
 
     public void sendLine(){
         //byte[] data = { 0x0c, 0x00, (byte) 0x80, (byte) 0x09, 0x00, 0x03, 0x42, 0x43, 0x00 };
-        byte[] data = { 0x0c, 0x00, (byte) 0x80, 0x03, (byte) 0x1F4, 0x00, (byte) 0x5E8, 0x00,  };
+        byte[] data = { 0x06, 0x00, (byte) 0x80, 0x03, (byte) 0x1F4, 0x00, (byte) 0x5E8, 0x00};
         write(data);
     }
 

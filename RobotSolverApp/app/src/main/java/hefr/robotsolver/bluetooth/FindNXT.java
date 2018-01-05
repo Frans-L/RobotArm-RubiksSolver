@@ -22,7 +22,7 @@
  * Copyright (c) 2009 The Android Open Source Project
  */
 
-package hefr.robotsolver.Bluetooth;
+package hefr.robotsolver.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

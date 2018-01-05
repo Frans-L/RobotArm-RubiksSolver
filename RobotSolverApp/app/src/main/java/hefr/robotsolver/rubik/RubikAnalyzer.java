@@ -1,4 +1,4 @@
-package hefr.robotsolver;
+package hefr.robotsolver.rubik;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

@@ -14,14 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CameraActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Bluetooth.FindNXT" android:configChanges="keyboardHidden|orientation" android:label="Select device" android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+        <activity android:name=".bluetooth.FindNXT" android:configChanges="keyboardHidden|orientation" android:label="Select device" android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
         </activity>
     </application>
 
