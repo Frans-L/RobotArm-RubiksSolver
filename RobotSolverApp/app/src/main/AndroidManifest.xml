@@ -21,6 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Bluetooth.FindNXT" android:configChanges="keyboardHidden|orientation" android:label="Select device" android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+        </activity>
     </application>
 
 

@@ -45,7 +45,7 @@ public class ImageAnalyzer {
                 int color = bitmap.getPixel(x, y);
 
                 int pixel;
-                if (energy > 10 || Util.greyscale(color) < 20) {
+                if (energy > 15 || Util.greyscale(color) < 20) {
                     pixel = debugColor;
                 } else {
                     pixel = color;
@@ -68,7 +68,7 @@ public class ImageAnalyzer {
         BooleanMap mask = new BooleanMap(energyMap, debugColor, BooleanMap.A);
         mask.fillEdges(BooleanMap.A);
         mask.clearNoise(BooleanMap.A);
-        mask.fillAreasUnder(40, BooleanMap.A);
+        mask.fillAreasUnder(23, BooleanMap.A);
 
         return mask.maskBitmap(energyMap, debugColor, BooleanMap.A);
 

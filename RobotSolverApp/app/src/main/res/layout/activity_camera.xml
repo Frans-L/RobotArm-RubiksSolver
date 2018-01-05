@@ -10,14 +10,15 @@
 
     <Button
         android:id="@+id/takePictureButton"
-        android:layout_width="121dp"
+        android:layout_width="120dp"
         android:layout_height="48dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:text="Capture"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cubePreviewView" />
+        app:layout_constraintEnd_toEndOf="@+id/previewViewMask"
+        app:layout_constraintStart_toStartOf="@+id/previewViewMask"
+        app:layout_constraintTop_toTopOf="@+id/cubePreviewView" />
 
     <TextureView
         android:id="@+id/previewView"
@@ -64,5 +65,28 @@
         app:layout_constraintBottom_toBottomOf="@+id/previewViewMask"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/previewViewMask" />
+
+    <Button
+        android:id="@+id/findNXTButton"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Connect NXT"
+        app:layout_constraintEnd_toEndOf="@+id/takePictureButton"
+        app:layout_constraintStart_toStartOf="@+id/takePictureButton"
+        app:layout_constraintTop_toBottomOf="@+id/cubePreviewView" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="BEEP"
+        app:layout_constraintEnd_toEndOf="@+id/findNXTButton"
+        app:layout_constraintStart_toStartOf="@+id/findNXTButton"
+        app:layout_constraintTop_toBottomOf="@+id/findNXTButton" />
 
 </android.support.constraint.ConstraintLayout>

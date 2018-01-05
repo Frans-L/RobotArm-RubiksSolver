@@ -5,7 +5,11 @@ package hefr.robotsolver;
  */
 
 import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraCaptureSession;
@@ -32,6 +36,9 @@ import android.widget.ImageView;
 
 import java.util.Arrays;
 
+import hefr.robotsolver.Bluetooth.FindNXT;
+import hefr.robotsolver.Bluetooth.NXTTalker;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
@@ -47,10 +54,18 @@ public class CameraActivity extends AppCompatActivity {
     private CameraCaptureSession previewSession; //Camera's session that handles incoming data
 
     private Button takePicButton;
+    private Button findNXTButton;
+    private Button sendButton;
+
     private static final int REQUEST_CAMERA = 0; //ID to ask camera permissions
+    private static final int REQUEST_ENABLE_BT = 1; //ID to ask bluetooth permissions
+    private static final int REQUEST_CONNECT_DEVICE = 2; //ID to ask connect to devices
 
     private RubikCube rubikCube;
     private RubikAnalyzer rubikAnalyzer;
+
+    private BluetoothAdapter bluetoothAdapter;
+    private NXTTalker nxtTalker; //Handles sending messages to the nxt
 
     @Override
     /** Initializes the view*/
@@ -79,7 +94,6 @@ public class CameraActivity extends AppCompatActivity {
 
         Choreographer.getInstance().postFrameCallbackDelayed(new onLoaded(), 200);
 
-        //Set actions to the button
         takePicButton = (Button) findViewById(R.id.takePictureButton);
         takePicButton.setOnClickListener(new View.OnClickListener() {
 
@@ -96,6 +110,44 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
+        findNXTButton = (Button) findViewById(R.id.findNXTButton);
+        findNXTButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (!bluetoothAdapter.isEnabled()) {
+                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+                } else {
+                    findNXT();
+                }
+            }
+        });
+
+        sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (nxtTalker != null && nxtTalker.getState() == NXTTalker.STATE_CONNECTED) {
+                    nxtTalker.sendLine();
+                }
+            }
+        });
+
+        //Bluetooth
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        nxtTalker = new NXTTalker();
+
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 
@@ -108,6 +160,13 @@ public class CameraActivity extends AppCompatActivity {
             updateRubikImageLocation();
         }
 
+    }
+
+    private void findNXT() {
+        if (!FindNXT.running) {
+            Intent intent = new Intent(this, FindNXT.class);
+            startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+        }
     }
 
     /**
@@ -126,6 +185,34 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        restartCamera();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+
+            case REQUEST_CAMERA:
+                if (resultCode == Activity.RESULT_OK) {
+                    openCamera(); //try to open camera again
+                }
+                break;
+
+            case REQUEST_ENABLE_BT:
+                if (resultCode == Activity.RESULT_OK) {
+                    findNXT();
+                }
+                break;
+
+            case REQUEST_CONNECT_DEVICE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String address = data.getExtras().getString(FindNXT.EXTRA_DEVICE_ADDRESS);
+                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+                    //mDeviceAddress = address;
+                    nxtTalker.connect(device);
+                }
+                break;
+        }
     }
 
     //Initializes the camera
@@ -209,6 +296,14 @@ public class CameraActivity extends AppCompatActivity {
             cameraDevice.close();
         }
 
+    }
+
+    //Restarts the camera
+    private void restartCamera() {
+        if (cameraDevice != null) {
+            cameraDevice.close();
+            openCamera();
+        }
     }
 
     // Starts the preview
