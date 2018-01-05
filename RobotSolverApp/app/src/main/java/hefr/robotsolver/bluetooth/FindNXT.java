@@ -1,4 +1,3 @@
-
 package hefr.robotsolver.bluetooth;
 
 import android.app.Activity;
