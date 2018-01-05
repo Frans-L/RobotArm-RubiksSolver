@@ -22,8 +22,8 @@ The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and
     * Kinematics **✔**
     * Servo Controls **✔**
     * Grabber **✔**
-    * Compressed Air **WIP**
-    * Movements  
+    * Compressed Air **✔**
+    * Movements **WIP**
 
 * **Android App**
     * Image Recognition
@@ -56,3 +56,10 @@ The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and
 ## License
 
 This project is licensed under the Apache Software License 2.0.
+
+The classes under 'bluetooth' package are modified versions from the project [nxt-remote-control](https://github.com/jfedor2/nxt-remote-control/tree/master/src/org/jfedor/nxtremotecontrol)
+made by [jfedor2](https://github.com/jfedor2).
+
+* bluetooth.FindNXT.java is a modified version from [ChooseDeviceActivity.java](https://github.com/jfedor2/nxt-remote-control/blob/master/src/org/jfedor/nxtremotecontrol/NXTTalker.java)
+* bluetooth.NXTTalker.java is a modified version from [NXTTalker.java](https://github.com/jfedor2/nxt-remote-control/blob/master/src/org/jfedor/nxtremotecontrol/NXTTalker.java)
+
