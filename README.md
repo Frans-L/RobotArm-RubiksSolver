@@ -57,7 +57,7 @@ The arms are built by using 12 servo motors, 4 NXTs, a can of compressed air and
 
 This project is licensed under the Apache Software License 2.0.
 
-The classes under 'bluetooth' package are modified versions from the project [nxt-remote-control](https://github.com/jfedor2/nxt-remote-control/tree/master/src/org/jfedor/nxtremotecontrol)
+The classes under 'bluetooth' package are modified versions from classes of the project [nxt-remote-control](https://github.com/jfedor2/nxt-remote-control/tree/master/src/org/jfedor/nxtremotecontrol)
 (Apache License 2.0)
 made by [jfedor2](https://github.com/jfedor2).
 
