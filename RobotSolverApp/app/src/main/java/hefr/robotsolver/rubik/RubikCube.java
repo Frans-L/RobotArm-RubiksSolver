@@ -30,6 +30,10 @@ public class RubikCube {
         return cube[side][locationX + locationY * 3];
     }
 
+    public int[] getSide(int side){
+        return  cube[side];
+    }
+
     //** Return the color of the piece*/
     public int getColor(int side, int locationX, int locationY) {
         //Log.println(Log.ERROR, "Frans", "" + (locationX + locationY*3));
@@ -45,6 +49,21 @@ public class RubikCube {
                 cube[s][i] = s;
             }
         }
+    }
+
+    public void testPosition() {
+        cube[FRONT][0] = ORANGE;
+        cube[FRONT][1] = ORANGE;
+        cube[FRONT][2] = ORANGE;
+        cube[LEFT][0] = WHITE;
+        cube[LEFT][1] = WHITE;
+        cube[LEFT][2] = WHITE;
+        cube[BACK][0] = RED;
+        cube[BACK][1] = RED;
+        cube[BACK][2] = RED;
+        cube[RIGHT][0] = YELLOW;
+        cube[RIGHT][1] = YELLOW;
+        cube[RIGHT][2] = YELLOW;
     }
 
 

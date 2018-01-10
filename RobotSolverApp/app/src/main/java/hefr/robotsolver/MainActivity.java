@@ -34,7 +34,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import hefr.robotsolver.bluetooth.FindNXT;
 import hefr.robotsolver.bluetooth.NXTTalker;
@@ -42,6 +46,7 @@ import hefr.robotsolver.rubik.CubePreviewView;
 import hefr.robotsolver.rubik.ImageAnalyzer;
 import hefr.robotsolver.rubik.RubikAnalyzer;
 import hefr.robotsolver.rubik.RubikCube;
+import hefr.robotsolver.rubik.RubikSolveRequest;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     /** Initializes the view*/
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_camera); //set the current layout
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         previewView.setSurfaceTextureListener(surfaceTextureListener);
 
         rubikCube = new RubikCube();
+        rubikCube.testPosition();
         rubikAnalyzer = new RubikAnalyzer(rubikCube);
 
         //sets the mask over the preview
@@ -135,9 +141,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (nxtTalker != null && nxtTalker.getState() == NXTTalker.STATE_CONNECTED) {
+                /*if (nxtTalker != null && nxtTalker.getState() == NXTTalker.STATE_CONNECTED) {
                     nxtTalker.sendLine();
                 }
+                */
+
+                RubikSolveRequest request = new RubikSolveRequest(rubikCube);
+                request.execute();
             }
         });
 
@@ -148,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+    cubevariablevalue=+U%3A123400500+L%3A000000000+F%3A000000000+R%3A000000000+B%3A000000000+D%3A000000000&solvesubmit=Solve+Cube
+    solvesubmit=Solve Cube&cubevariablevalue=+U%3A555555555+L%3A222222222+F%3A444444444+R%3A666666666+B%3A111111111+D%3A333333333
+    */
 
     @Override
     protected void onStart() {
