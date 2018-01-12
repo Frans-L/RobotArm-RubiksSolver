@@ -1,6 +1,7 @@
 package hefr.robotsolver.rubik;
 
 import android.os.AsyncTask;
+import android.os.Debug;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ import hefr.robotsolver.utils.Util;
  * Created by Frans on 10/01/2018.
  */
 
-public class RubikSolveRequest extends AsyncTask<Void, Void, Void> {
+public class RubikSolveRequest extends AsyncTask<Void, Void, String> {
 
     private final static String URL = "http://rubiksolve.com/cubesolve.php";
     private final static String METHOD = "POST";
@@ -33,17 +34,25 @@ public class RubikSolveRequest extends AsyncTask<Void, Void, Void> {
     private final static int movePatternGroup = 1;
     private final static String NOANSWER = "No solution!";
 
-    private RubikCube cube;
+    private RubikShowSolution.Callable callable;
+    public static RubikCube cube;
 
-    public RubikSolveRequest(RubikCube cube) {
+    public RubikSolveRequest(RubikShowSolution.Callable callable, RubikCube cube) {
+        this.callable = callable;
         this.cube = cube;
     }
 
+
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected void onPostExecute(String result) {
+        callable.updateSolution(result);
+        Log.wtf("Frans", "NYT??");
+    }
 
+    @Override
+    protected String doInBackground(Void... voids) {
+        String answer = "Error!";
         try {
-
             //url settings
             URL url = new URL(URL);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -61,8 +70,11 @@ public class RubikSolveRequest extends AsyncTask<Void, Void, Void> {
             int statusCode = urlConnection.getResponseCode();
 
             if (statusCode == HttpURLConnection.HTTP_OK) { //success
-                String answer = parseAnswer(Util.inputStreamToString(urlConnection.getInputStream()));
+                answer = parseAnswer(Util.inputStreamToString(urlConnection.getInputStream()));
                 Log.wtf("Frans", "Solution: \n" + answer);
+
+                Log.wtf("Frans", "DONE");
+
             } else {
                 Log.wtf("frans", "Statuscode: " + statusCode);
             }
@@ -71,7 +83,7 @@ public class RubikSolveRequest extends AsyncTask<Void, Void, Void> {
             Log.e("frans", "WTF: \n" + e.getMessage());
         }
 
-        return null;
+        return answer;
     }
 
 

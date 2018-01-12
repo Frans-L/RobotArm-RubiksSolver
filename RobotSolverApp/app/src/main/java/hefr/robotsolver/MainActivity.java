@@ -46,6 +46,7 @@ import hefr.robotsolver.rubik.CubePreviewView;
 import hefr.robotsolver.rubik.ImageAnalyzer;
 import hefr.robotsolver.rubik.RubikAnalyzer;
 import hefr.robotsolver.rubik.RubikCube;
+import hefr.robotsolver.rubik.RubikShowSolution;
 import hefr.robotsolver.rubik.RubikSolveRequest;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private Button takePicButton;
     private Button findNXTButton;
     private Button sendButton;
+    private Button solutionButton;
 
     private static final int REQUEST_CAMERA = 0; //ID to ask camera permissions
     private static final int REQUEST_ENABLE_BT = 1; //ID to ask bluetooth permissions
@@ -146,8 +148,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 */
 
+                /*
                 RubikSolveRequest request = new RubikSolveRequest(rubikCube);
                 request.execute();
+                */
+            }
+        });
+
+        solutionButton = (Button) findViewById(R.id.solutionButton);
+        solutionButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showSolution();
             }
         });
 
@@ -178,6 +191,10 @@ public class MainActivity extends AppCompatActivity {
             updateRubikImageLocation();
         }
 
+    }
+
+    private void showSolution() {
+        Intent intent = new Intent(this, RubikShowSolution.class);
     }
 
     private void findNXT() {

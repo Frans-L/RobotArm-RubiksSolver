@@ -2,91 +2,108 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="bottom"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/takePictureButton"
-        android:layout_width="120dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_weight="1"
-        android:text="Capture"
-        app:layout_constraintEnd_toEndOf="@+id/previewViewMask"
-        app:layout_constraintStart_toStartOf="@+id/previewViewMask"
-        app:layout_constraintTop_toTopOf="@+id/cubePreviewView" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-    <TextureView
-        android:id="@+id/previewView"
-        android:layout_width="130dip"
-        android:layout_height="173dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="130dp"
+            android:layout_height="173dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0"
+            android:src="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/previewViewMask"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/previewViewMask" />
 
-    <hefr.robotsolver.PreviewOverlayView
-        android:id="@+id/previewViewMask"
-        android:layout_width="130dp"
-        android:layout_height="173dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/previewView"
-        app:layout_constraintEnd_toEndOf="@+id/previewView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/previewView"
-        app:layout_constraintTop_toTopOf="@+id/previewView"
-        app:layout_constraintVertical_bias="0.533" />
+        <Button
+            android:id="@+id/findNXTButton"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Connect NXT"
+            app:layout_constraintEnd_toEndOf="@+id/takePictureButton"
+            app:layout_constraintStart_toStartOf="@+id/takePictureButton"
+            app:layout_constraintTop_toBottomOf="@+id/cubePreviewView" />
 
-    <hefr.robotsolver.rubik.CubePreviewView
-        android:id="@+id/cubePreviewView"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/previewViewMask" />
+        <hefr.robotsolver.rubik.CubePreviewView
+            android:id="@+id/cubePreviewView"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/previewViewMask" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="130dp"
-        android:layout_height="173dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0"
-        android:src="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/previewViewMask"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/previewViewMask" />
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="BEEP"
+            app:layout_constraintEnd_toEndOf="@+id/findNXTButton"
+            app:layout_constraintStart_toStartOf="@+id/findNXTButton"
+            app:layout_constraintTop_toBottomOf="@+id/findNXTButton" />
 
-    <Button
-        android:id="@+id/findNXTButton"
-        android:layout_width="120dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Connect NXT"
-        app:layout_constraintEnd_toEndOf="@+id/takePictureButton"
-        app:layout_constraintStart_toStartOf="@+id/takePictureButton"
-        app:layout_constraintTop_toBottomOf="@+id/cubePreviewView" />
+        <Button
+            android:id="@+id/solutionButton"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Solution"
+            app:layout_constraintEnd_toEndOf="@+id/cubePreviewView"
+            app:layout_constraintStart_toStartOf="@+id/cubePreviewView"
+            app:layout_constraintTop_toTopOf="@+id/findNXTButton" />
 
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="120dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="BEEP"
-        app:layout_constraintEnd_toEndOf="@+id/findNXTButton"
-        app:layout_constraintStart_toStartOf="@+id/findNXTButton"
-        app:layout_constraintTop_toBottomOf="@+id/findNXTButton" />
+        <Button
+            android:id="@+id/takePictureButton"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Capture"
+            app:layout_constraintEnd_toEndOf="@+id/previewViewMask"
+            app:layout_constraintStart_toStartOf="@+id/previewViewMask"
+            app:layout_constraintTop_toTopOf="@+id/cubePreviewView" />
+
+        <TextureView
+            android:id="@+id/previewView"
+            android:layout_width="130dip"
+            android:layout_height="173dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <hefr.robotsolver.PreviewOverlayView
+            android:id="@+id/previewViewMask"
+            android:layout_width="130dp"
+            android:layout_height="173dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/previewView"
+            app:layout_constraintEnd_toEndOf="@+id/previewView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/previewView"
+            app:layout_constraintTop_toTopOf="@+id/previewView"
+            app:layout_constraintVertical_bias="0.533" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
