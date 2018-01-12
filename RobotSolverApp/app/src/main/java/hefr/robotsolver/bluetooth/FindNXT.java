@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import hefr.robotsolver.R;
@@ -25,6 +26,8 @@ import hefr.robotsolver.R;
 public class FindNXT extends Activity {
 
     public static String EXTRA_DEVICE_ADDRESS = "device_address"; //used in Intent
+    public static String EXTRA_CONNECTED_ADDRESSES = "connect_addresses"; //used in Intent
+
     public static boolean running = false; //used to determined if this activity is already runnin
 
     private ArrayAdapter<String> devicesArrayAdapter;
@@ -33,6 +36,8 @@ public class FindNXT extends Activity {
     private TextView heading;
     private ListView devicesList;
     private Button searchButton;
+
+    private String[] connected;
 
     private final String HEADING_PAIR = "Paired Devices:";
     private final String HEADING_EMPTY = "No Devices Found...";
@@ -70,6 +75,8 @@ public class FindNXT extends Activity {
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(broadcastReceiver, filter);
 
+        connected = getIntent().getStringArrayExtra(EXTRA_CONNECTED_ADDRESSES);
+
         addBluetoothPairs(); //show pairs
 
     }
@@ -83,10 +90,22 @@ public class FindNXT extends Activity {
 
         for (BluetoothDevice device : pairedDevices) {
             if ((device.getBluetoothClass() != null) && (device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.TOY_ROBOT)) {
-                devicesArrayAdapter.add(device.getName() + "\n(" + device.getAddress() + ")" + " (Paired)");
+                devicesArrayAdapter.add(deviceUIName(device, "(Paired)"));
                 heading.setText(HEADING_PAIR);
             }
         }
+    }
+
+    private String deviceUIName(BluetoothDevice device, String extra) {
+
+        String connect = "";
+        if (connected != null && Arrays.asList(connected).contains(device.getAddress())) {
+            connect = "(Connected)";
+            extra = "";
+        }
+
+
+        return device.getName() + "\n(" + device.getAddress() + ") " + extra + connect;
     }
 
     @Override
@@ -142,7 +161,7 @@ public class FindNXT extends Activity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if ((device.getBondState() != BluetoothDevice.BOND_BONDED) && (device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.TOY_ROBOT)) {
-                    devicesArrayAdapter.add(device.getName() + "\n(" + device.getAddress() + ")");
+                    devicesArrayAdapter.add(deviceUIName(device, "(New)"));
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 searchButton.setEnabled(true); //after search, actives the search button again

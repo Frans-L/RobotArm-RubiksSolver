@@ -19,8 +19,10 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,9 +38,12 @@ import android.widget.ImageView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import hefr.robotsolver.bluetooth.FindNXT;
 import hefr.robotsolver.bluetooth.NXTTalker;
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private RubikAnalyzer rubikAnalyzer;
 
     private BluetoothAdapter bluetoothAdapter;
-    private NXTTalker nxtTalker; //Handles sending messages to the nxt
+    private List<NXTTalker> nxtTalker = new ArrayList<>(); //Handles sending messages to the nxt
 
     @Override
     /** Initializes the view*/
@@ -143,15 +148,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /*if (nxtTalker != null && nxtTalker.getState() == NXTTalker.STATE_CONNECTED) {
-                    nxtTalker.sendLine();
+                if (nxtTalker.size() > 0) {
+                    for (NXTTalker talker : nxtTalker) {
+                        if (talker.getState() == NXTTalker.STATE_CONNECTED) {
+                            talker.sendLine();
+                        } else if (talker.getState() == NXTTalker.STATE_NONE) {
+                            Log.wtf("Frans", "Disconneted?");
+                        }
+                    }
                 }
-                */
 
-                /*
-                RubikSolveRequest request = new RubikSolveRequest(rubikCube);
-                request.execute();
-                */
             }
         });
 
@@ -166,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Bluetooth
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        nxtTalker = new NXTTalker();
 
 
     }
@@ -194,13 +199,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSolution() {
-        Intent intent = new Intent(this, RubikShowSolution.class);
+        RubikSolveRequest request = new RubikSolveRequest(new AfterRequest(), rubikCube);
+        request.execute();
+        //Intent intent = new Intent(this, RubikShowSolution.class);
     }
 
+    private class AfterRequest implements RubikShowSolution.Callable {
+        public void updateSolution(String solution) {
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.mainView), solution, Snackbar.LENGTH_LONG);
+            snackbar.show();
+            Log.wtf("Frans", "main: " + solution);
+        }
+    }
+
+    public interface Callable {
+        void updateSolution(String solution);
+    }
+
+    //starts find nxt activity
     private void findNXT() {
         if (!FindNXT.running) {
+            cleanDeadNXT(); //clean dead connections
             Intent intent = new Intent(this, FindNXT.class);
+            if (nxtTalker.size() > 0) //add connected device (if possible)
+                intent.putExtra(FindNXT.EXTRA_CONNECTED_ADDRESSES, getNXTAddresses());
+
             startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+        }
+    }
+
+    //returns all nxt addresses
+    private String[] getNXTAddresses() {
+        String[] addresses = new String[nxtTalker.size()];
+        for (int i = 0; i < nxtTalker.size(); i++) {
+            addresses[i] = nxtTalker.get(i).address;
+        }
+        return addresses;
+    }
+
+    //removes dead connections
+    private void cleanDeadNXT() {
+        for (int i = nxtTalker.size() - 1; i >= 0; i--) {
+            if (nxtTalker.get(i).getState() == NXTTalker.STATE_NONE) { //is dead
+                nxtTalker.remove(i);
+            }
         }
     }
 
@@ -242,9 +284,25 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_CONNECT_DEVICE:
                 if (resultCode == Activity.RESULT_OK) {
                     String address = data.getExtras().getString(FindNXT.EXTRA_DEVICE_ADDRESS);
-                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-                    //mDeviceAddress = address;
-                    nxtTalker.connect(device);
+
+                    //if old device, disconnect
+                    boolean newDevice = true;
+                    for (int i = nxtTalker.size() - 1; i >= 0; i--) {
+                        if (Objects.equals(nxtTalker.get(i).address, address)) {
+                            nxtTalker.get(i).stop();
+                            nxtTalker.remove(i);
+                            newDevice = false;
+                            break;
+                        }
+                    }
+
+                    //if new device, connect
+                    if (newDevice) {
+                        NXTTalker talker = new NXTTalker();
+                        talker.connect(address);
+                        nxtTalker.add(talker);
+                    }
+
                 }
                 break;
         }
@@ -261,8 +319,7 @@ public class MainActivity extends AppCompatActivity {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             previewSize = map.getOutputSizes(SurfaceTexture.class)[0];
-            Log.println(Log.ERROR, "FRANS", "True Height: " + previewSize.getHeight() + " width: " + previewSize.getWidth());
-
+            //Log.println(Log.ERROR, "FRANS", "True Height: " + previewSize.getHeight() + " width: " + previewSize.getWidth());
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PERMISSION_GRANTED) {
                 manager.openCamera(cameraID, cameraStateCallBack, null);

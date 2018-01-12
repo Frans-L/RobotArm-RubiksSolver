@@ -3,6 +3,7 @@ package hefr.robotsolver.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,8 @@ public class NXTTalker {
     public static final int STATE_NONE = 0;
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
+
+    public String address;
 
     private int mState;
     private BluetoothAdapter mAdapter;
@@ -35,8 +38,10 @@ public class NXTTalker {
         return mState;
     }
 
-    public synchronized void connect(BluetoothDevice device) {
+    public synchronized void connect(String address) {
         //Log.i("NXT", "NXTTalker.connect()");
+        this.address = address;
+        BluetoothDevice device = mAdapter.getRemoteDevice(address);
 
         if (mState == STATE_CONNECTING) {
             if (mConnectThread != null) {
@@ -99,10 +104,9 @@ public class NXTTalker {
 
     public void sendLine() {
         //byte[] data = { 0x0c, 0x00, (byte) 0x80, (byte) 0x09, 0x00, 0x03, 0x42, 0x43, 0x00 };
-        byte[] data = {0x06, 0x00, (byte) 0x80, 0x03, (byte) 0x1F4, 0x00, (byte) 0x5E8, 0x00};
+        byte[] data = {0x06, 0x00, (byte) 0x00, 0x03, (byte) 0x1F4, 0x00, (byte) 0x5E8, 0x00};
         write(data);
     }
-
 
     private void write(byte[] out) {
         ConnectedThread r;
@@ -196,6 +200,7 @@ public class NXTTalker {
             while (true) {
                 try {
                     bytes = mmInStream.read(buffer);
+                    Log.wtf("Frans", "Income: " + Integer.toString(bytes));
                     //toast(Integer.toString(bytes) + " bytes read from device");
                 } catch (IOException e) {
                     e.printStackTrace();
